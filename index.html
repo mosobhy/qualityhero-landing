@@ -140,11 +140,13 @@
       max-width: 1280px;
       margin: 0 auto;
       padding: 80px 48px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
       width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      max-width: 560px;
     }
 
     .hero-label {
@@ -177,17 +179,24 @@
 
     .hero-actions .btn { padding: 14px 24px; font-size: 15px; }
 
-    /* Behavioral map visual */
+    /* Behavioral map visual — full-height right-side background */
     .hero-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 56%;
+      pointer-events: none;
+      z-index: 0;
+      /* Soft left-edge fade so the visual dissolves into the text area */
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 14%, black 30%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 14%, black 30%);
     }
 
     .hero-visual svg {
       width: 100%;
-      max-width: 520px;
-      overflow: visible;
+      height: 100%;
+      display: block;
     }
 
     /* ── SECTION COMMON ── */
@@ -747,8 +756,8 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .hero-inner    { grid-template-columns: 1fr; gap: 48px; }
-      .hero-visual   { display: none; }
+      /* Visual shrinks to a subtle right-edge glow on tablets */
+      .hero-visual { width: 70%; opacity: 0.5; }
       .why-grid      { grid-template-columns: 1fr 1fr; }
       .steps         { grid-template-columns: 1fr 1fr; }
       .steps::before { display: none; }
@@ -813,6 +822,7 @@
      HERO
 ════════════════════════════════════════ -->
 <section id="hero">
+  <!-- Text content — sits in normal flow, left half -->
   <div class="hero-inner">
     <div class="hero-text fade-in">
       <h1>See How Your Software Actually Behaves.</h1>
@@ -822,175 +832,135 @@
         <a href="#how" class="btn btn-outline">Watch Interactive Demo</a>
       </div>
     </div>
+  </div>
 
-    <div class="hero-visual">
-      <!--
-        SVG coordinate system: 520 × 560 viewBox
-        Outer ring   cx=260, cy=290, r=230
-        Inner ring   cx=260, cy=290, r=175
+  <!-- Visual — absolutely covers the full right side of the section -->
+  <div class="hero-visual">
+    <!--
+      viewBox 520×900: tall panel matching full-vh right side.
+      Ring centre: cx=310, cy=450
+      Outer ring r=340 — bleeds off all 4 edges, fills the panel completely.
+      Inner ring r=255
 
-        Bubble centres (cx, cy, r):
-          PaymentService  — (330, 160, 90)   top-right   blue
-          Reporting       — (140, 240, 78)   left-mid    amber
-          AuthModule      — (340, 360, 82)   bottom-right  red
-          SharedKernel    — (175, 370, 62)   bottom-left   green
+      Bubble centres (cx, cy, r):
+        PaymentService  (380, 195, 108)   top-right    blue
+        Reporting       (155, 310,  90)   mid-left     amber
+        AuthModule      (395, 475, 100)   bottom-right red
+        SharedKernel    (195, 490,  74)   bottom-left  green
+    -->
+    <svg viewBox="0 0 520 900" preserveAspectRatio="xMaxYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="gPay"    cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.38"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0.03"/></radialGradient>
+        <radialGradient id="gRep"    cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.30"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.03"/></radialGradient>
+        <radialGradient id="gAuth"   cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.30"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.03"/></radialGradient>
+        <radialGradient id="gShared" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.30"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.03"/></radialGradient>
+      </defs>
 
-        Mini-node dots (r=14) placed relative to each bubble centre.
-        Badge cards drawn with <foreignObject> for crisp HTML text.
-      -->
-      <svg viewBox="0 0 520 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- Radial fills for each module -->
-          <radialGradient id="gPay" cx="40%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#2563eb" stop-opacity="0.03"/>
-          </radialGradient>
-          <radialGradient id="gRep" cx="40%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.03"/>
-          </radialGradient>
-          <radialGradient id="gAuth" cx="40%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="#ef4444" stop-opacity="0.03"/>
-          </radialGradient>
-          <radialGradient id="gShared" cx="40%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#22c55e" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="#22c55e" stop-opacity="0.03"/>
-          </radialGradient>
-          <!-- Clip paths so node dots stay inside their bubble -->
-          <clipPath id="clipPay">   <circle cx="330" cy="160" r="88"/></clipPath>
-          <clipPath id="clipRep">   <circle cx="140" cy="240" r="76"/></clipPath>
-          <clipPath id="clipAuth">  <circle cx="340" cy="360" r="80"/></clipPath>
-          <clipPath id="clipShare"> <circle cx="175" cy="370" r="60"/></clipPath>
-        </defs>
+      <!-- Outer / inner rings -->
+      <circle cx="310" cy="450" r="338" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+      <circle cx="310" cy="450" r="252" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
 
-        <!-- ── Outer / inner rings ── -->
-        <circle cx="260" cy="290" r="230" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-        <circle cx="260" cy="290" r="175" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
+      <!-- PAYMENT SERVICE (top-right, blue) -->
+      <circle cx="380" cy="195" r="108" fill="url(#gPay)" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.7"/>
+      <text x="380" y="182" text-anchor="middle" fill="white"                 font-size="13" font-weight="700" font-family="Inter,sans-serif">PaymentService</text>
+      <text x="380" y="198" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10"                   font-family="Inter,sans-serif">8 Classes · 56 Methods</text>
+      <rect x="359" y="205" width="42" height="16" rx="8" fill="rgba(37,99,235,0.25)" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text x="380" y="217" text-anchor="middle" fill="#3b82f6" font-size="9" font-weight="700" font-family="Inter,sans-serif">NEW</text>
+      <!-- PaymentService dots r=20: grid ±48 → dist=67.9; 67.9+20+3=90.9≤108✓; neighbor 96≥44✓ -->
+      <g>
+        <circle cx="428" cy="147" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="428" y="151" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="9" font-family="Inter,sans-serif">Stripe</text>
+        <circle cx="332" cy="147" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="332" y="151" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">PayCtrl</text>
+        <circle cx="428" cy="243" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="428" y="247" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="9" font-family="Inter,sans-serif">Auth</text>
+        <circle cx="332" cy="243" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="332" y="247" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Refund</text>
+      </g>
 
-        <!-- ══════════════════════════════
-             PAYMENT SERVICE  (top-right)
-        ═══════════════════════════════ -->
-        <circle cx="330" cy="160" r="90" fill="url(#gPay)" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.7"/>
-        <!-- centre label -->
-        <text x="330" y="150" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Inter,sans-serif">PaymentService</text>
-        <text x="330" y="163" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="8.5" font-family="Inter,sans-serif">8 Classes · 56 Methods</text>
-        <!-- NEW pill -->
-        <rect x="312" y="169" width="36" height="14" rx="7" fill="rgba(37,99,235,0.25)" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.6"/>
-        <text x="330" y="179.5" text-anchor="middle" fill="#3b82f6" font-size="8" font-weight="700" font-family="Inter,sans-serif">NEW</text>
-        <!-- mini-node dots (clipped) -->
-        <g clip-path="url(#clipPay)">
-          <!-- Stripe  top-right -->
-          <circle cx="388" cy="108" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="388" y="112" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7.5" font-family="Inter,sans-serif">Stripe</text>
-          <!-- PayCtrl  left -->
-          <circle cx="256" cy="155" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="256" y="159" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">PayCtrl</text>
-          <!-- Auth  bottom-right -->
-          <circle cx="378" cy="205" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="378" y="209" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7.5" font-family="Inter,sans-serif">Auth</text>
-          <!-- Refund  bottom-left -->
-          <circle cx="272" cy="210" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="272" y="214" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Refund</text>
-        </g>
+      <!-- REPORTING (mid-left, amber) -->
+      <circle cx="155" cy="310" r="90" fill="url(#gRep)" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.65"/>
+      <text x="155" y="297" text-anchor="middle" fill="white"                 font-size="13" font-weight="700" font-family="Inter,sans-serif">Reporting</text>
+      <text x="155" y="312" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10"                   font-family="Inter,sans-serif">6 Classes · 39 Methods</text>
+      <!-- Reporting r=90, dot r=16.
+           Top row y=256: x=117,193 → dist=√(38²+54²)=65.4; 65.4+16+3=84.4≤90✓
+           Bot row y=352: x=117,193 → dist=√(38²+42²)=56.6; 56.6+16+3=75.6≤90✓
+           Appl  y=368: x=155    → dist=58; 58+16+3=77≤90✓
+           H-gap row1: 76px≥34✓  H-gap row2: 76px≥34✓
+           V-gap col1: 96px≥34✓  Sched↔Appl: √(38²+16²)=41.2≥34✓ -->
+      <g>
+        <circle cx="117" cy="256" r="16" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="117" y="260" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">RptSvc</text>
+        <circle cx="193" cy="256" r="16" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="193" y="260" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">PdfSvc</text>
+        <circle cx="117" cy="352" r="16" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="117" y="356" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Sched</text>
+        <circle cx="193" cy="352" r="16" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="193" y="356" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Export</text>
+        <circle cx="155" cy="368" r="16" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="155" y="372" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Appl</text>
+      </g>
 
-        <!-- ══════════════════════════════
-             REPORTING  (left-mid)
-        ═══════════════════════════════ -->
-        <circle cx="140" cy="240" r="78" fill="url(#gRep)" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.65"/>
-        <text x="140" y="231" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Inter,sans-serif">Reporting</text>
-        <text x="140" y="244" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="8.5" font-family="Inter,sans-serif">6 Classes · 39 Methods</text>
-        <g clip-path="url(#clipRep)">
-          <!-- RptSvc  top-left -->
-          <circle cx="93" cy="193" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="93" y="197" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">RptSvc</text>
-          <!-- PdfSvc  top-right -->
-          <circle cx="187" cy="193" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="187" y="197" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">PdfSvc</text>
-          <!-- Export  bottom-right -->
-          <circle cx="183" cy="280" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="183" y="284" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Export</text>
-          <!-- Sched  bottom-left -->
-          <circle cx="97" cy="280" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="97" y="284" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Sched</text>
-          <!-- Appl  bottom-centre -->
-          <circle cx="140" cy="302" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="140" y="306" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7.5" font-family="Inter,sans-serif">Appl</text>
-        </g>
+      <!-- AUTH MODULE (bottom-right, red) -->
+      <circle cx="395" cy="475" r="100" fill="url(#gAuth)" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.55"/>
+      <text x="395" y="461" text-anchor="middle" fill="white"                 font-size="13" font-weight="700" font-family="Inter,sans-serif">AuthModule</text>
+      <text x="395" y="476" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10"                   font-family="Inter,sans-serif">6 Classes · 44 Methods</text>
+      <rect x="347" y="483" width="96" height="16" rx="8" fill="rgba(245,158,11,0.18)" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text x="395" y="495" text-anchor="middle" fill="#f59e0b" font-size="8.5" font-weight="700" font-family="Inter,sans-serif">&#9888; Medium Risk</text>
+      <!-- AuthModule r=100, dot r=20.
+           Grid ±45, ±47 → dist=√(45²+47²)=65.0; 65.0+20+3=88≤100✓
+           H-gap: 90px≥42✓  V-gap: 94px≥42✓  diagonal: 128px≥42✓ -->
+      <g>
+        <circle cx="350" cy="428" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="350" y="432" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8" font-family="Inter,sans-serif">AuthSvc</text>
+        <circle cx="440" cy="428" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="440" y="432" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8" font-family="Inter,sans-serif">UserId</text>
+        <circle cx="350" cy="522" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="350" y="526" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Token</text>
+        <circle cx="440" cy="522" r="20" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="440" y="526" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8.5" font-family="Inter,sans-serif">Valid</text>
+      </g>
 
-        <!-- ══════════════════════════════
-             AUTH MODULE  (bottom-right)
-        ═══════════════════════════════ -->
-        <circle cx="340" cy="360" r="82" fill="url(#gAuth)" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.55"/>
-        <text x="340" y="348" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Inter,sans-serif">AuthModule</text>
-        <text x="340" y="361" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="8.5" font-family="Inter,sans-serif">6 Classes · 44 Methods</text>
-        <!-- Medium Risk pill -->
-        <rect x="302" y="367" width="76" height="14" rx="7" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.6"/>
-        <text x="340" y="377.5" text-anchor="middle" fill="#f59e0b" font-size="7.5" font-weight="700" font-family="Inter,sans-serif">⚠ Medium Risk</text>
-        <g clip-path="url(#clipAuth)">
-          <!-- AuthSvc  top-left -->
-          <circle cx="291" cy="313" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="291" y="317" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="6.5" font-family="Inter,sans-serif">AuthSvc</text>
-          <!-- UserId  top-right -->
-          <circle cx="387" cy="313" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="387" y="317" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="6.5" font-family="Inter,sans-serif">UserId</text>
-          <!-- Token  bottom-left -->
-          <circle cx="296" cy="404" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="296" y="408" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Token</text>
-          <!-- Valid  bottom-right -->
-          <circle cx="382" cy="404" r="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="382" y="408" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Valid</text>
-        </g>
+      <!-- SHARED KERNEL (bottom-left, green) -->
+      <circle cx="195" cy="490" r="74" fill="url(#gShared)" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"/>
+      <text x="195" y="478" text-anchor="middle" fill="white"                 font-size="12" font-weight="700" font-family="Inter,sans-serif">SharedKernel</text>
+      <text x="195" y="492" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9.5"                  font-family="Inter,sans-serif">3 Classes · 81 Methods</text>
+      <!-- SharedKernel cx=195 cy=490 r=74, dot r=14.
+           Text block occupies y≈466–494. Dots placed above and below it.
+           TOP pair   y=446 (offset -44), x=±23:
+             dist=√(23²+44²)=49.6 → 49.6+14+3=66.6≤74✓  gap=46≥30✓
+           BOTTOM trio y=518 (offset +28), x=0,±34:
+             center  dist=28 → 28+14+3=45≤74✓
+             sides   dist=√(34²+28²)=44.1 → 44.1+14+3=61.1≤74✓
+             side-to-center 34≥30✓  side-to-side 68≥30✓
+           Cross-row min dist=72.8≥30✓ -->
+      <g>
+        <circle cx="172" cy="446" r="18" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="172" y="450" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8" font-family="Inter,sans-serif">BaseSvc</text>
+        <circle cx="218" cy="446" r="18" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="218" y="450" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="8" font-family="Inter,sans-serif">DomEvt</text>
+        <circle cx="161" cy="518" r="14" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="161" y="522" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="Inter,sans-serif">Guard</text>
+        <circle cx="195" cy="518" r="14" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="195" y="522" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="Inter,sans-serif">Result</text>
+        <circle cx="229" cy="518" r="14" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        <text  x="229" y="522" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="Inter,sans-serif">Spec</text>
+      </g>
 
-        <!-- ══════════════════════════════
-             SHARED KERNEL  (bottom-left)
-        ═══════════════════════════════ -->
-        <circle cx="175" cy="370" r="62" fill="url(#gShared)" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"/>
-        <text x="175" y="361" text-anchor="middle" fill="white" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">SharedKernel</text>
-        <text x="175" y="374" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="8" font-family="Inter,sans-serif">3 Classes · 81 Methods</text>
-        <g clip-path="url(#clipShare)">
-          <!-- BaseSvc  top-left -->
-          <circle cx="132" cy="325" r="13" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="132" y="329" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="6.5" font-family="Inter,sans-serif">BaseSvc</text>
-          <!-- DomEvt  top-right -->
-          <circle cx="218" cy="325" r="13" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="218" y="329" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="6.5" font-family="Inter,sans-serif">DomEvt</text>
-          <!-- Guard  bottom-left -->
-          <circle cx="137" cy="410" r="13" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="137" y="414" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Guard</text>
-          <!-- Spec  bottom-right -->
-          <circle cx="213" cy="410" r="13" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="213" y="414" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="7" font-family="Inter,sans-serif">Spec</text>
-          <!-- Result  centre-bottom -->
-          <circle cx="175" cy="420" r="13" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-          <text x="175" y="424" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="6.5" font-family="Inter,sans-serif">Result</text>
-        </g>
+      <!-- TOP BADGE — BillingService.sln -->
+      <rect x="155" y="44"  width="254" height="70" rx="12" fill="#1a2235" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="282" y="67"  text-anchor="middle" fill="white"               font-size="13" font-weight="700" font-family="Inter,sans-serif">BillingService.sln</text>
+      <text x="282" y="84"  text-anchor="middle" fill="rgba(139,154,179,1)" font-size="10"                   font-family="Inter,sans-serif">6 Projects · 48 Classes · 312 Methods</text>
+      <rect x="214" y="91"  width="136" height="17" rx="8.5" fill="rgba(34,197,94,0.15)"/>
+      <text x="282" y="103" text-anchor="middle" fill="#22c55e" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">&#10003;  Health: 94% · Good</text>
 
-        <!-- ══════════════════════════════
-             TOP BADGE — BillingService.sln
-        ═══════════════════════════════ -->
-        <!-- card background -->
-        <rect x="138" y="14" width="244" height="62" rx="10" fill="#1a2235" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-        <!-- title -->
-        <text x="260" y="34" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Inter,sans-serif">BillingService.sln</text>
-        <!-- meta -->
-        <text x="260" y="49" text-anchor="middle" fill="rgba(139,154,179,1)" font-size="9.5" font-family="Inter,sans-serif">6 Projects · 48 Classes · 312 Methods</text>
-        <!-- health pill -->
-        <rect x="206" y="56" width="108" height="15" rx="7.5" fill="rgba(34,197,94,0.15)"/>
-        <text x="260" y="67" text-anchor="middle" fill="#22c55e" font-size="8.5" font-weight="700" font-family="Inter,sans-serif">✓  Health: 94% · Good</text>
-
-        <!-- ══════════════════════════════
-             BOTTOM BADGE — PaymentSvc.Process()
-        ═══════════════════════════════ -->
-        <rect x="295" y="482" width="196" height="52" rx="10" fill="#1a2235" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-        <text x="393" y="501" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Inter,sans-serif">PaymentSvc.Process()</text>
-        <!-- HEALTHY pill -->
-        <rect x="313" y="507" width="58" height="15" rx="7.5" fill="rgba(34,197,94,0.18)"/>
-        <text x="342" y="518" text-anchor="middle" fill="#22c55e" font-size="8" font-weight="700" font-family="Inter,sans-serif">HEALTHY</text>
-        <!-- calls/min -->
-        <text x="400" y="518" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="Inter,sans-serif">3,847 calls/min</text>
-      </svg>
-    </div>
+      <!-- BOTTOM BADGE — PaymentSvc.Process() -->
+      <rect x="278" y="618" width="214" height="60" rx="12" fill="#1a2235" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="385" y="642" text-anchor="middle" fill="white"                  font-size="12" font-weight="700" font-family="Inter,sans-serif">PaymentSvc.Process()</text>
+      <rect x="296" y="648" width="68"  height="17" rx="8.5" fill="rgba(34,197,94,0.18)"/>
+      <text x="330" y="660" text-anchor="middle" fill="#22c55e"               font-size="9"   font-weight="700" font-family="Inter,sans-serif">HEALTHY</text>
+      <text x="410" y="660" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="9.5"                  font-family="Inter,sans-serif">80 Behaviors</text>
+    </svg>
   </div>
 </section>
 
