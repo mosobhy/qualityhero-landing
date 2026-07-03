@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -58,19 +59,13 @@
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 17px;
     }
 
-    .nav-logo-icon {
-      width: 32px; height: 32px;
-      background: var(--blue);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
+    .nav-logo-img {
+      height: 32px;
+      width: auto;
+      display: block;
     }
-
-    .nav-logo-icon svg { width: 18px; height: 18px; }
 
     .nav-links {
       display: flex;
@@ -796,12 +791,7 @@
 ════════════════════════════════════════ -->
 <nav>
   <a href="#" class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-      </svg>
-    </div>
-    QualityHero
+    <img src="assets/website-header.svg" alt="QualityHero" class="nav-logo-img" />
   </a>
 
   <ul class="nav-links">
@@ -1344,13 +1334,8 @@
   <div class="footer-inner">
     <div class="footer-main">
       <div class="footer-brand">
-        <div class="nav-logo" style="margin-bottom:12px;">
-          <div class="nav-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-          </div>
-          QualityHero
+        <div style="margin-bottom:12px;">
+          <img src="assets/website-header.svg" alt="QualityHero" class="nav-logo-img" />
         </div>
         <p>Redefining software quality through automated behavioral intelligence.</p>
       </div>
