@@ -376,6 +376,89 @@
       overflow-x: auto;
     }
 
+    /* ── Editor highlight overlay ── */
+    .sim-editor-wrap {
+      position: relative;
+      min-height: 280px;
+      background: #0d1117;
+    }
+
+    /* Shared typography — must match exactly between pre and textarea */
+    .sim-editor-wrap pre,
+    .sim-editor-wrap textarea {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      tab-size: 4;
+      white-space: pre;
+      word-wrap: normal;
+      padding: 16px 20px;
+      margin: 0;
+      border: none;
+      outline: none;
+      box-sizing: border-box;
+      width: 100%;
+      overflow: auto;
+      min-height: 280px;
+    }
+
+    /* Highlight layer — behind the textarea */
+    #simHighlight {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      color: #e2e8f0;
+      background: transparent;
+      overflow: hidden; /* textarea drives the scroll */
+    }
+
+    #simHighlight code {
+      display: block;
+      min-height: 100%;
+    }
+
+    /* Textarea — transparent text, sits on top */
+    .sim-editor {
+      position: relative;
+      z-index: 1;
+      color: transparent;
+      background: transparent;
+      caret-color: #e2e8f0;
+      resize: vertical;
+      display: block;
+      min-height: 280px;
+    }
+
+    .sim-editor::placeholder {
+      color: var(--text-dim);
+      font-style: italic;
+      /* placeholder is visible because textarea has transparent text */
+      opacity: 1;
+      caret-color: var(--text-dim);
+    }
+
+    /* C# token colours */
+    .hl-kw   { color: #79c0ff; }          /* keywords */
+    .hl-type { color: #ffa657; }          /* built-in types */
+    .hl-fn   { color: #d2a8ff; }          /* method names */
+    .hl-str  { color: #a5d6ff; }          /* strings */
+    .hl-num  { color: #79c0ff; }          /* numbers */
+    .hl-cmt  { color: #6e7681; font-style: italic; } /* comments */
+    .hl-pp   { color: #ff7b72; }          /* preprocessor / attributes */
+
+    /* Disabled simulate button */
+    #simBtn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Not-ready state for the status tag */
+    #simReady.not-ready {
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
     .code-line { display: flex; gap: 0; padding: 0 16px; }
 
     .code-num {
@@ -881,6 +964,139 @@
       .cta-box::before { width: 400px; height: 400px; }
     }
 
+    /* ── EMAIL MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 36px 32px 32px;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      animation: modalIn 0.22s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)  scale(1); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .modal-close:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+
+    .modal-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: var(--blue-dim);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue-light);
+      margin-bottom: 20px;
+    }
+
+    .modal-box h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .modal-box p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+
+    .modal-field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .modal-field input {
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .modal-field input:focus { border-color: var(--blue-light); }
+    .modal-field input.invalid { border-color: #ef4444; }
+
+    .modal-field-error {
+      font-size: 12px;
+      color: #ef4444;
+      min-height: 16px;
+      display: block;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-actions .btn { flex: 1; justify-content: center; padding: 12px 16px; }
+
+    .modal-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .modal-cancel:hover { border-color: rgba(255,255,255,0.25); color: var(--text); background: rgba(255,255,255,0.04); }
+
+    /* Loading spinner inside button */
+    .btn-spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Simulate button loading state ── */
+    #simBtn.loading { opacity: 0.7; pointer-events: none; }
+
     /* Fade-in animation */
     .fade-in {
       opacity: 0;
@@ -1173,43 +1389,53 @@
           <div class="dot-green"></div>
           <div class="code-filename">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            ApplyDiscount.cs
+            <span id="simFilename">ApplyDiscount.cs</span>
           </div>
           <span class="code-lang">C#</span>
         </div>
-        <div class="code-body">
-          <div class="code-line"><span class="code-num">1</span><span class="code-content"><span class="kw">public</span> <span class="type">DiscountResult</span> <span class="fn">ApplyDiscount</span>(</span></div>
-          <div class="code-line"><span class="code-num">2</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">decimal</span> amount,</span></div>
-          <div class="code-line"><span class="code-num">3</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">CustomerTier</span> tier,</span></div>
-          <div class="code-line"><span class="code-num">4</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">int</span> yearsActive)</span></div>
-          <div class="code-line"><span class="code-num">5</span><span class="code-content">{</span></div>
-          <div class="code-line"><span class="code-num">6</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (yearsActive &gt;= <span class="num">7</span> &amp;&amp; tier == <span class="type">CustomerTier</span>.Enterprise)</span></div>
-          <div class="code-line"><span class="code-num">7</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;{</span></div>
-          <div class="code-line"><span class="code-num">8</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="type">DiscountResult</span>.<span class="fn">AutoApproved</span>(amount * <span class="num">0.15m</span>);</span></div>
-          <div class="code-line"><span class="code-num">9</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
-          <div class="code-line"><span class="code-num">10</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (amount &gt; <span class="num">10000</span>)</span></div>
-          <div class="code-line"><span class="code-num">11</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;{</span></div>
-          <div class="code-line"><span class="code-num">12</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="type">DiscountResult</span>.<span class="fn">ManualReview</span>(<span class="str">"Exceeds threshold"</span>);</span></div>
-          <div class="code-line"><span class="code-num">13</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
-          <div class="code-line"><span class="code-num">14</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="type">DiscountResult</span>.<span class="fn">Standard</span>(amount * <span class="num">0.05m</span>);</span></div>
-          <div class="code-line"><span class="code-num">15</span><span class="code-content">}</span></div>
+        <div class="sim-editor-wrap">
+          <!-- Highlight layer (behind) -->
+          <pre id="simHighlight" aria-hidden="true"><code></code></pre>
+          <!-- Editable layer (on top, transparent text) -->
+          <textarea
+            id="simEditor"
+            class="sim-editor"
+            spellcheck="false"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Paste your method here…"
+          >public DiscountResult ApplyDiscount(
+    decimal amount,
+    CustomerTier tier,
+    int yearsActive)
+{
+    if (yearsActive >= 7 && tier == CustomerTier.Enterprise)
+    {
+        return DiscountResult.AutoApproved(amount * 0.15m);
+    }
+    if (amount > 10000)
+    {
+        return DiscountResult.ManualReview("Exceeds threshold");
+    }
+    return DiscountResult.Standard(amount * 0.05m);
+}</textarea>
         </div>
         <div class="code-footer">
-          <span>Method detected: ApplyDiscount() · 3 parameters · 3 behavioral paths found</span>
-          <span class="ready">Ready to simulate</span>
+          <span id="simMeta">Method detected: ApplyDiscount() · 3 parameters · 3 behavioral paths found</span>
+          <span id="simReady" class="ready">Ready to simulate</span>
         </div>
       </div>
 
       <div class="sim-btn-wrap fade-in">
-        <a href="#" class="btn btn-primary">
+        <button id="simBtn" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Simulate Behavior
-        </a>
+        </button>
         <p class="sim-note">Analysis runs in seconds · No test setup required</p>
-        <div class="sim-paths">
+        <div class="sim-paths" id="simPathsWrap">
           <div class="paths-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            3 Behavioral Paths Discovered
+            <span id="simPathsCount">3 Behavioral Paths Discovered</span>
           </div>
         </div>
       </div>
@@ -1494,8 +1720,414 @@
   </div>
 </footer>
 
+<!-- ── EMAIL MODAL ── -->
+<div id="emailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </div>
+    <h3 id="modalTitle">Run Behavioral Simulation</h3>
+    <p>Enter your email to receive the analysis results and track your behavioral contracts.</p>
+    <div class="modal-field">
+      <label for="modalEmail">Email address</label>
+      <input id="modalEmail" type="email" placeholder="you@company.com" autocomplete="email" spellcheck="false" />
+      <span class="modal-field-error" id="modalEmailError"></span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline modal-cancel" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSubmit">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Simulate Behavior
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Hamburger toggle
+  // ── C# SYNTAX HIGHLIGHTER ──────────────────────────────────────────
+  const CS_KEYWORDS = new Set([
+    'abstract','as','base','bool','break','byte','case','catch','char',
+    'checked','class','const','continue','decimal','default','delegate',
+    'do','double','else','enum','event','explicit','extern','false',
+    'finally','fixed','float','for','foreach','goto','if','implicit',
+    'in','int','interface','internal','is','lock','long','namespace',
+    'new','null','object','operator','out','override','params','private',
+    'protected','public','readonly','ref','return','sbyte','sealed',
+    'short','sizeof','stackalloc','static','string','struct','switch',
+    'this','throw','true','try','typeof','uint','ulong','unchecked',
+    'unsafe','ushort','using','virtual','void','volatile','while',
+    'async','await','var','dynamic','yield','partial','get','set',
+    'value','add','remove','from','where','select','let','join',
+    'orderby','ascending','descending','into','on','equals','group','by'
+  ]);
+
+  const CS_TYPES = new Set([
+    'bool','byte','char','decimal','double','float','int','long','object',
+    'sbyte','short','string','uint','ulong','ushort','void','var',
+    'dynamic','Boolean','Byte','Char','Decimal','Double','Single','Int32',
+    'Int64','Object','String','DateTime','Guid','Task','List','Dictionary',
+    'IEnumerable','IList','ICollection','Action','Func','Nullable',
+    'Exception','DiscountResult','CustomerTier','TimeSpan','Array'
+  ]);
+
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function highlightCSharp(code) {
+    // Tokenise one character at a time, greedy-matching in priority order:
+    // 1. line comments  2. block comments  3. strings  4. verbatim strings
+    // 5. char literals  6. preprocessor directives  7. numbers  8. identifiers
+    let out = '';
+    let i = 0;
+    const len = code.length;
+
+    while (i < len) {
+      // Line comment
+      if (code[i] === '/' && code[i+1] === '/') {
+        let j = i;
+        while (j < len && code[j] !== '\n') j++;
+        out += `<span class="hl-cmt">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Block comment
+      if (code[i] === '/' && code[i+1] === '*') {
+        let j = i + 2;
+        while (j < len && !(code[j-1] === '*' && code[j] === '/')) j++;
+        j++;
+        out += `<span class="hl-cmt">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Verbatim string @"..."
+      if (code[i] === '@' && code[i+1] === '"') {
+        let j = i + 2;
+        while (j < len) {
+          if (code[j] === '"' && code[j+1] === '"') { j += 2; continue; }
+          if (code[j] === '"') { j++; break; }
+          j++;
+        }
+        out += `<span class="hl-str">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Regular string
+      if (code[i] === '"') {
+        let j = i + 1;
+        while (j < len && code[j] !== '"' && code[j] !== '\n') {
+          if (code[j] === '\\') j++;
+          j++;
+        }
+        if (j < len && code[j] === '"') j++;
+        out += `<span class="hl-str">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Char literal
+      if (code[i] === "'") {
+        let j = i + 1;
+        if (j < len && code[j] === '\\') j++;
+        j++;
+        if (j < len && code[j] === "'") j++;
+        out += `<span class="hl-str">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Preprocessor / attribute
+      if (code[i] === '#' || (code[i] === '[' && /[A-Z]/.test(code[i+1] || ''))) {
+        let j = i;
+        if (code[i] === '#') {
+          while (j < len && code[j] !== '\n') j++;
+        } else {
+          while (j < len && code[j] !== ']') j++;
+          if (j < len) j++;
+        }
+        out += `<span class="hl-pp">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Number (integer, float, hex, binary)
+      if (/[0-9]/.test(code[i]) || (code[i] === '.' && /[0-9]/.test(code[i+1] || ''))) {
+        let j = i;
+        if (code[i] === '0' && (code[i+1] === 'x' || code[i+1] === 'X')) {
+          j += 2;
+          while (j < len && /[0-9a-fA-F_]/.test(code[j])) j++;
+        } else if (code[i] === '0' && (code[i+1] === 'b' || code[i+1] === 'B')) {
+          j += 2;
+          while (j < len && /[01_]/.test(code[j])) j++;
+        } else {
+          while (j < len && /[0-9_]/.test(code[j])) j++;
+          if (j < len && code[j] === '.') { j++; while (j < len && /[0-9_]/.test(code[j])) j++; }
+          if (j < len && /[eE]/.test(code[j])) { j++; if (/[+-]/.test(code[j]||'')) j++; while (j < len && /[0-9]/.test(code[j])) j++; }
+        }
+        // Optional suffix: f, d, m, L, u, ul, etc.
+        while (j < len && /[fFdDmMlLuU]/.test(code[j])) j++;
+        out += `<span class="hl-num">${escapeHtml(code.slice(i, j))}</span>`;
+        i = j;
+        continue;
+      }
+      // Identifier or keyword
+      if (/[a-zA-Z_$]/.test(code[i])) {
+        let j = i;
+        while (j < len && /[\w$]/.test(code[j])) j++;
+        const word = code.slice(i, j);
+        // Look-ahead: method call?  word(
+        const isCall = /\s*\(/.test(code.slice(j));
+        if (CS_KEYWORDS.has(word)) {
+          out += `<span class="hl-kw">${escapeHtml(word)}</span>`;
+        } else if (CS_TYPES.has(word) || /^[A-Z]/.test(word)) {
+          out += isCall
+            ? `<span class="hl-fn">${escapeHtml(word)}</span>`
+            : `<span class="hl-type">${escapeHtml(word)}</span>`;
+        } else {
+          out += isCall
+            ? `<span class="hl-fn">${escapeHtml(word)}</span>`
+            : escapeHtml(word);
+        }
+        i = j;
+        continue;
+      }
+      // Everything else — pass through
+      out += escapeHtml(code[i]);
+      i++;
+    }
+    return out;
+  }
+
+  // ── ALL DOM REFS — declared first, no TDZ crashes ────────────────
+  const simHighlight  = document.getElementById('simHighlight');
+  const simEditor     = document.getElementById('simEditor');
+  const simBtn        = document.getElementById('simBtn');
+  const simFilename   = document.getElementById('simFilename');
+  const simMeta       = document.getElementById('simMeta');
+  const simReady      = document.getElementById('simReady');
+  const simPathsWrap  = document.getElementById('simPathsWrap');
+  const simPathsCount = document.getElementById('simPathsCount');
+  const emailModal    = document.getElementById('emailModal');
+  const modalEmail    = document.getElementById('modalEmail');
+  const modalEmailErr = document.getElementById('modalEmailError');
+  const modalSubmit   = document.getElementById('modalSubmit');
+  const modalClose    = document.getElementById('modalClose');
+  const modalCancel   = document.getElementById('modalCancel');
+
+  // ── HIGHLIGHT ─────────────────────────────────────────────────────
+  function renderHighlight() {
+    const code = simEditor.value;
+    simHighlight.querySelector('code').innerHTML =
+      code ? highlightCSharp(code) : '';
+    simHighlight.scrollTop  = simEditor.scrollTop;
+    simHighlight.scrollLeft = simEditor.scrollLeft;
+  }
+
+  simEditor.addEventListener('scroll', () => {
+    simHighlight.scrollTop  = simEditor.scrollTop;
+    simHighlight.scrollLeft = simEditor.scrollLeft;
+  });
+
+  // --- Method preprocessor ---
+  // Extracts: method name, parameter count from raw code text.
+  // Supports C#, Java, TypeScript, JavaScript, Python, Go function signatures.
+  function parseMethod(code) {
+    const trimmed = code.trim();
+    if (!trimmed) return null;
+
+    // Patterns ordered by specificity
+    const patterns = [
+      // C# / Java / TypeScript: [modifiers] ReturnType MethodName(params)
+      /(?:(?:public|private|protected|internal|static|async|override|virtual|abstract|sealed)\s+)*[\w<>\[\]]+\s+([\w]+)\s*\(([^)]*)\)/,
+      // Python: def method_name(params):
+      /def\s+([\w]+)\s*\(([^)]*)\)/,
+      // JS/TS arrow: const name = (params) =>  or  function name(params)
+      /(?:function\s+)?([\w]+)\s*[=\s]*(?:async\s*)?\(([^)]*)\)\s*(?:=>|{)/,
+      // Go: func MethodName(params)
+      /func\s+(?:\(\w+\s+\*?\w+\)\s+)?([\w]+)\s*\(([^)]*)\)/,
+    ];
+
+    for (const pattern of patterns) {
+      const match = trimmed.match(pattern);
+      if (match) {
+        const name   = match[1].trim();
+        const params = match[2].trim();
+        // Count parameters (split by comma, ignore empty)
+        const paramList = params
+          ? params.split(',').map(p => p.trim()).filter(Boolean)
+          : [];
+        return { name, paramCount: paramList.length };
+      }
+    }
+    return null;
+  }
+
+  // ── Update UI metadata on every keystroke (no API call here) ────────
+  function updateSimUI() {
+    const code    = simEditor.value;
+    const isEmpty = code.trim() === '';
+
+    simBtn.disabled = isEmpty;
+
+    if (isEmpty) {
+      simReady.textContent    = 'Not ready to simulate';
+      simReady.className      = 'not-ready';
+      simFilename.textContent = 'untitled.cs';
+      simMeta.textContent     = 'Paste a method to begin analysis';
+      simPathsWrap.style.visibility = 'hidden';
+      return;
+    }
+
+    simReady.textContent = 'Ready to simulate';
+    simReady.className   = 'ready';
+    simPathsWrap.style.visibility = 'visible';
+
+    const parsed = parseMethod(code);
+    if (parsed) {
+      simFilename.textContent = `${parsed.name}.cs`;
+      simMeta.textContent =
+        `Method detected: ${parsed.name}() · ${parsed.paramCount} parameter${parsed.paramCount !== 1 ? 's' : ''} · — behavioral paths found`;
+    } else {
+      simFilename.textContent = 'untitled.cs';
+      simMeta.textContent     = 'Paste a valid method signature to detect parameters';
+    }
+  }
+
+  // ── API call ─────────────────────────────────────────────────────────
+  async function runAnalysis(email, code) {
+    const res = await fetch('http://localhost:8080/demo/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, methodSource: code }),
+    });
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    return res.json();
+  }
+
+  // ── Apply API response to the UI ────────────────────────────────────
+  function applyAnalysisResult(data) {
+    const pathCount = Array.isArray(data.paths) ? data.paths.length : 0;
+    const parsed    = parseMethod(simEditor.value);
+    const name      = parsed ? parsed.name : (data.methodName || 'Method');
+    const params    = parsed ? parsed.paramCount : 0;
+
+    // Footer metadata
+    simMeta.textContent =
+      `Method detected: ${name}() · ${params} parameter${params !== 1 ? 's' : ''} · ${pathCount} behavioral path${pathCount !== 1 ? 's' : ''} found`;
+
+    // Paths pill
+    simPathsCount.textContent =
+      `${pathCount} Behavioral Path${pathCount !== 1 ? 's' : ''} Discovered`;
+    simPathsWrap.style.visibility = 'visible';
+  }
+
+  // ── Email modal logic ────────────────────────────────────────────────
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function validateEmail(val) {
+    if (!val.trim())         return 'Email is required.';
+    if (!EMAIL_RE.test(val)) return 'Please enter a valid email address.';
+    return '';
+  }
+
+  function openModal() {
+    modalEmail.value       = '';
+    modalEmailErr.textContent = '';
+    modalEmail.classList.remove('invalid');
+    emailModal.classList.add('open');
+    setTimeout(() => modalEmail.focus(), 80);
+  }
+
+  function closeModal() {
+    emailModal.classList.remove('open');
+  }
+
+  // Live validation while user types inside the modal
+  modalEmail.addEventListener('input', () => {
+    const err = validateEmail(modalEmail.value);
+    modalEmailErr.textContent = err;
+    modalEmail.classList.toggle('invalid', !!err && modalEmail.value !== '');
+  });
+
+  // Close on backdrop click
+  emailModal.addEventListener('click', e => {
+    if (e.target === emailModal) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && emailModal.classList.contains('open')) closeModal();
+  });
+
+  modalClose.addEventListener('click',  closeModal);
+  modalCancel.addEventListener('click', closeModal);
+
+  // Simulate button → open modal
+  simBtn.addEventListener('click', openModal);
+
+  // Modal submit → validate → call API
+  modalSubmit.addEventListener('click', async () => {
+    const email = modalEmail.value.trim();
+    const err   = validateEmail(email);
+    if (err) {
+      modalEmailErr.textContent = err;
+      modalEmail.classList.add('invalid');
+      modalEmail.focus();
+      return;
+    }
+
+    // Show loading state
+    modalSubmit.disabled    = true;
+    modalSubmit.innerHTML   = `<span class="btn-spinner"></span> Analyzing…`;
+
+    try {
+      const data = await runAnalysis(email, simEditor.value);
+      closeModal();
+      applyAnalysisResult(data);
+    } catch (err) {
+      modalEmailErr.textContent = `Request failed: ${err.message}`;
+      modalEmail.classList.add('invalid');
+    } finally {
+      modalSubmit.disabled  = false;
+      modalSubmit.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Simulate Behavior`;
+    }
+  });
+
+  // Enter key inside email field submits
+  modalEmail.addEventListener('keydown', e => {
+    if (e.key === 'Enter') modalSubmit.click();
+  });
+
+  // Run on every keystroke (highlight immediately, debounce metadata 300ms)
+  let simDebounce;
+  simEditor.addEventListener('input', () => {
+    renderHighlight();
+    clearTimeout(simDebounce);
+    simDebounce = setTimeout(updateSimUI, 300);
+  });
+
+  // Tab key inserts 4 spaces instead of moving focus
+  simEditor.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = simEditor.selectionStart;
+      const end   = simEditor.selectionEnd;
+      simEditor.value = simEditor.value.substring(0, start) + '    ' + simEditor.value.substring(end);
+      simEditor.selectionStart = simEditor.selectionEnd = start + 4;
+      renderHighlight();
+      clearTimeout(simDebounce);
+      simDebounce = setTimeout(updateSimUI, 300);
+    }
+  });
+
+  // Init — render highlight and metadata for the pre-filled code
+  renderHighlight();
+  updateSimUI();
+
+  // ── HAMBURGER TOGGLE ───────────────────────────────────────────────
   const navToggle = document.getElementById('navToggle');
   const navLinks  = document.getElementById('navLinks');
 
@@ -1522,8 +2154,6 @@
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
   // Smooth mobile menu (nav links)
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
@@ -1534,7 +2164,10 @@
       }
     });
   });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
+
 
 </body>
 </html>
