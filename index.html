@@ -568,26 +568,26 @@
 
     .compare-head {
       display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      padding: 12px 16px;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      padding: 10px 12px;
       background: var(--card2);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border);
     }
 
-    .compare-head .col-trad { display: none; }
+    .compare-head .col-trad { display: block; }
     .compare-head .col-qh   { color: var(--blue-light); }
 
     .compare-row {
       display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      padding: 12px 16px;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      padding: 12px 12px;
       border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      font-size: 12px;
       align-items: center;
       transition: background 0.15s;
     }
@@ -595,9 +595,9 @@
     .compare-row:last-child { border-bottom: none; }
     .compare-row:hover { background: rgba(255,255,255,0.02); }
 
-    .compare-row .col-feature { color: var(--text); }
-    .compare-row .col-trad    { display: none; }
-    .compare-row .col-qh      { color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .compare-row .col-feature { color: var(--text); font-size: 12px; }
+    .compare-row .col-trad    { display: block; color: var(--text-dim); font-size: 11px; }
+    .compare-row .col-qh      { color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 11px; }
 
     .check-icon { color: var(--green); flex-shrink: 0; }
 
@@ -753,10 +753,11 @@
       .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
       .footer-bottom { flex-direction: row; justify-content: space-between; }
 
-      .compare-head { grid-template-columns: 2fr 2fr 2.5fr; padding: 14px 20px; }
-      .compare-head .col-trad { display: block; }
-      .compare-row  { grid-template-columns: 2fr 2fr 2.5fr; padding: 14px 20px; }
-      .compare-row .col-trad  { display: block; color: var(--text-dim); }
+      .compare-head { grid-template-columns: 2fr 2fr 2.5fr; padding: 14px 20px; font-size: 11px; }
+      .compare-row  { grid-template-columns: 2fr 2fr 2.5fr; padding: 14px 20px; font-size: 14px; }
+      .compare-row .col-feature { font-size: 14px; }
+      .compare-row .col-trad    { font-size: 14px; }
+      .compare-row .col-qh      { font-size: 14px; gap: 8px; }
 
       /* Tablet: 4-col grid, still no arrows */
       .journey-flow {
