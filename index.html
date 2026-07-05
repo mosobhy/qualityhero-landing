@@ -2182,7 +2182,7 @@
     return text.replace(pattern, '<span class="var-highlight">$1</span>');
   }
 
-  function applyAnalysisResult(data) {
+  function applyAnalysisResult(data, scroll = false) {
     const findings    = Array.isArray(data.topFindings) ? data.topFindings : [];
     const totalPaths  = data.totalPaths     || 0;
     const totalCases  = data.totalTestCases || 0;
@@ -2264,7 +2264,7 @@
 
     updateMeta();
     reviewSection.style.display = 'block';
-    reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (scroll) reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ── Email modal logic ────────────────────────────────────────────────
@@ -2329,7 +2329,7 @@
     try {
       const data = await runAnalysis(email, simEditor.value);
       closeModal();
-      applyAnalysisResult(data);
+      applyAnalysisResult(data, true);
     } catch (err) {
       modalEmailErr.textContent = `Request failed: ${err.message}`;
       modalEmail.classList.add('invalid');
