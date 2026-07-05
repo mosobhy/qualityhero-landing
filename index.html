@@ -558,40 +558,142 @@
     }
 
     .btn-approve {
-      background: var(--green);
-      color: #fff;
-      border: none;
+      background: rgba(34,197,94,0.08);
+      color: rgba(34,197,94,0.45);
+      border: 1px solid rgba(34,197,94,0.2);
       border-radius: 8px;
       padding: 10px;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
+      cursor: not-allowed;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      opacity: 0.7;
+      pointer-events: none;
     }
 
     .btn-investigate {
       background: transparent;
-      color: var(--orange);
-      border: 1px solid var(--orange);
+      color: rgba(245,158,11,0.4);
+      border: 1px solid rgba(245,158,11,0.2);
       border-radius: 8px;
       padding: 10px;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
+      cursor: not-allowed;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      opacity: 0.7;
+      pointer-events: none;
     }
 
     .behavior-footer {
-      text-align: center;
       padding-top: 20px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .behavior-footer .meta-line { font-size: 13px; color: var(--text-muted); }
     .behavior-footer .meta-line span { color: var(--blue-light); font-weight: 600; }
+
+    /* ── Dynamic behavior card extras ── */
+    .behavior-description {
+      margin: 10px 0 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .behavior-significance {
+      font-size: 12px;
+      color: var(--orange);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .behavior-model {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 10px;
+    }
+
+    .model-chip {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      color: var(--text-muted);
+    }
+
+    .model-chip strong { color: var(--text); font-weight: 600; }
+
+    .btn-load-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue-light);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .btn-load-more:hover { opacity: 1; text-decoration: underline; }
+
+    /* Inline variable name highlight inside card body text */
+    .var-highlight {
+      font-family: 'Courier New', monospace;
+      font-size: 0.92em;
+      font-weight: 700;
+      color: #ffa657;
+      background: rgba(255,166,87,0.1);
+      border: 1px solid rgba(255,166,87,0.25);
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
+
+    .behavior-scores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .score-chip {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .score-high   { background: rgba(239,68,68,0.15);  color: #f87171; }
+    .score-med    { background: rgba(245,158,11,0.15); color: var(--orange); }
+    .score-low    { background: rgba(139,154,179,0.12); color: var(--text-dim); }
+
+    /* Confidence badges */
+    .badge-likely-bug    { background: rgba(239,68,68,0.15);  color: #f87171;         border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge-intentional   { background: rgba(34,197,94,0.15);  color: var(--green);    border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge-uncertain     { background: rgba(245,158,11,0.15); color: var(--orange);   border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge-path          { background: rgba(59,130,246,0.15); color: var(--blue-light); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 
     /* ── BEHAVIORAL MAP ── */
     #map { background: var(--bg2); }
@@ -1056,8 +1158,30 @@
       width: 100%;
     }
 
-    .modal-field input:focus { border-color: var(--blue-light); }
-    .modal-field input.invalid { border-color: #ef4444; }
+    .modal-field input:focus,
+    .modal-field select:focus,
+    .modal-field textarea:focus { border-color: var(--blue-light); }
+    .modal-field input.invalid,
+    .modal-field select.invalid,
+    .modal-field textarea.invalid { border-color: #ef4444; }
+
+    .modal-field select,
+    .modal-field textarea {
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .modal-field select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b9ab3' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .modal-field select option { background: var(--bg2); color: var(--text); }
+    .modal-field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
 
     .modal-field-error {
       font-size: 12px;
@@ -1125,8 +1249,8 @@
   </ul>
 
   <div class="nav-actions">
-    <a href="#" class="btn btn-ghost">Sign In</a>
-    <a href="#" class="btn btn-primary">Get Started</a>
+    <a href="#" class="btn btn-ghost" data-beta>Sign In</a>
+    <a href="#" class="btn btn-primary" data-beta>Get Started</a>
     <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span>
       <span></span>
@@ -1145,8 +1269,8 @@
       <h1>See How Your Software Actually Behaves.</h1>
       <p class="hero-sub">QualityHero automatically discovers your application's behavior, detects unintended logic changes, and lets your team review software behavior before it reaches production.</p>
       <div class="hero-actions">
-        <a href="#simulation" class="btn btn-primary">Analyze Your Repository</a>
-        <a href="#how" class="btn btn-outline">Watch Interactive Demo</a>
+        <a href="#simulation" class="btn btn-primary" data-beta>Analyze Your Repository</a>
+        <a href="#simulation" class="btn btn-outline">Try Interactive Demo</a>
       </div>
     </div>
   </div>
@@ -1404,21 +1528,16 @@
             autocorrect="off"
             autocapitalize="off"
             placeholder="Paste your method here…"
-          >public DiscountResult ApplyDiscount(
-    decimal amount,
-    CustomerTier tier,
-    int yearsActive)
-{
-    if (yearsActive >= 7 && tier == CustomerTier.Enterprise)
+          >    public decimal CalculateDiscount(decimal amount)
     {
-        return DiscountResult.AutoApproved(amount * 0.15m);
-    }
-    if (amount > 10000)
-    {
-        return DiscountResult.ManualReview("Exceeds threshold");
-    }
-    return DiscountResult.Standard(amount * 0.05m);
-}</textarea>
+        if (amount > 1000m)
+            return amount * 0.15m;
+
+        if (amount > 500m && amount < 1000m)
+            return amount * 0.10m;
+
+        return 0m;
+    }</textarea>
         </div>
         <div class="code-footer">
           <span id="simMeta">Method detected: ApplyDiscount() · 3 parameters · 3 behavioral paths found</span>
@@ -1440,64 +1559,23 @@
         </div>
       </div>
 
-      <!-- Review section -->
-      <div class="fade-in">
+      <!-- Review section — populated dynamically after API response -->
+      <div class="fade-in" id="reviewSection" style="display:none;">
         <h3 style="font-size:22px;font-weight:800;margin-bottom:8px;">Review Discovered Behaviors</h3>
         <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">Each behavioral path requires your review and approval before it becomes part of the contract.</p>
-
-        <div class="behavior-cards">
-          <!-- Card 1 -->
-          <div class="behavior-card">
-            <div class="behavior-card-head">
-              <h4>Happy Path: Auto-Approval</h4>
-              <span class="badge-approved">APPROVED</span>
-            </div>
-            <div class="behavior-meta">INPUTS</div>
-            <div class="behavior-val">yearsActive: 8, tier: Enterprise, amount: $8,000</div>
-            <div class="behavior-meta">OUTPUT</div>
-            <div class="behavior-val">DiscountResult.AutoApproved – 15% discount applied</div>
-            <div class="behavior-actions">
-              <div class="btn-approve">Approve Behavior</div>
-              <div class="btn-investigate">Needs Investigation</div>
-            </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="behavior-card">
-            <div class="behavior-card-head">
-              <h4>High Value: Manual Review Required</h4>
-              <span class="badge-review">NEEDS REVIEW</span>
-            </div>
-            <div class="behavior-meta">INPUTS</div>
-            <div class="behavior-val">yearsActive: 3, tier: Standard, amount: $15,000</div>
-            <div class="behavior-meta">OUTPUT</div>
-            <div class="behavior-val">DiscountResult.ManualReview – "Exceeds threshold"</div>
-            <div class="behavior-actions">
-              <div class="btn-approve">Approve Behavior</div>
-              <div class="btn-investigate">Needs Investigation</div>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="behavior-card">
-            <div class="behavior-card-head">
-              <h4>Standard Discount Path</h4>
-              <span class="badge-under">UNDER REVIEW</span>
-            </div>
-            <div class="behavior-meta">INPUTS</div>
-            <div class="behavior-val">yearsActive: 2, tier: Basic, amount: $2,500</div>
-            <div class="behavior-meta">OUTPUT</div>
-            <div class="behavior-val">DiscountResult.Standard – 5% discount applied</div>
-            <div class="behavior-actions">
-              <div class="btn-approve" style="background:transparent;border:1px solid var(--green);color:var(--green);">Approve Behavior</div>
-              <div class="btn-investigate">Needs Investigation</div>
-            </div>
-          </div>
-        </div>
-
+        <div class="behavior-cards" id="behaviorCards"></div>
         <div class="behavior-footer">
-          <div class="meta-line">All behaviors reviewed &nbsp; <span>1 of 3 approved</span></div>
-          <a href="#" class="btn btn-primary" style="padding:12px 32px;">Update Behavioral Contract</a>
+          <div class="meta-line" id="behaviorMeta"></div>
+          <button class="btn-load-more" id="loadMoreBtn" data-beta>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+            </svg>
+            Load more Behaviors 
+          </button>
+          <a href="#" class="btn btn-primary" style="padding:12px 32px;opacity:0.45;cursor:not-allowed;pointer-events:none;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Update Behavioral Contract
+          </a>
         </div>
       </div>
     </div>
@@ -1658,8 +1736,8 @@
     <h2>Start Understanding<br>Your Software.</h2>
     <p>Stop reviewing code. Start reviewing behavior.</p>
     <div class="cta-actions">
-      <a href="#" class="btn btn-primary">Analyze Your Repository</a>
-      <a href="#" class="btn btn-outline">Book a Demo</a>
+      <a href="#" class="btn btn-primary" data-beta>Analyze Your Repository</a>
+      <a href="#" class="btn btn-outline" data-beta>Book a Demo</a>
     </div>
   </div>
 </section>
@@ -1692,7 +1770,7 @@
         <ul>
           <li><a href="#">Privacy</a></li>
           <li><a href="#">Terms</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#" data-beta>Contact</a></li>
           <li><a href="#">Status</a></li>
         </ul>
       </div>
@@ -1742,6 +1820,76 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Simulate Behavior
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── BETA SIGNUP MODAL ── -->
+<div id="betaModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="betaModalTitle">
+  <div class="modal-box" style="max-width:500px;">
+    <button class="modal-close" id="betaModalClose" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-icon" style="background:rgba(37,99,235,0.12);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <h3 id="betaModalTitle">Sign Up for Early Access</h3>
+    <p>Be the first to experience QualityHero. Fill in your details and we'll reach out when your spot is ready.</p>
+
+    <div id="betaForm">
+      <div class="modal-field">
+        <label for="betaName">Full Name</label>
+        <input id="betaName" type="text" placeholder="Jane Smith" autocomplete="name" />
+        <span class="modal-field-error" id="betaNameErr"></span>
+      </div>
+      <div class="modal-field">
+        <label for="betaCompanyEmail">Company Email</label>
+        <input id="betaCompanyEmail" type="email" placeholder="jane@company.com" autocomplete="work email" />
+        <span class="modal-field-error" id="betaCompanyEmailErr"></span>
+      </div>
+      <div class="modal-field">
+        <label for="betaPersonalEmail">Personal Email</label>
+        <input id="betaPersonalEmail" type="email" placeholder="jane@gmail.com" autocomplete="email" />
+        <span class="modal-field-error" id="betaPersonalEmailErr"></span>
+      </div>
+      <div class="modal-field">
+        <label for="betaLang">Repository Language</label>
+        <select id="betaLang">
+          <option value="" disabled selected>Select a language…</option>
+          <option value="c">C</option>
+          <option value="cpp">C++</option>
+          <option value="csharp">C#</option>
+          <option value="java">Java</option>
+          <option value="typescript">TypeScript</option>
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="go">Go</option>
+          <option value="rust">Rust</option>
+          <option value="other">Other</option>
+        </select>
+        <span class="modal-field-error" id="betaLangErr"></span>
+      </div>
+      <div class="modal-field">
+        <label for="betaFeedback">What are you hoping to solve? <span style="color:var(--text-dim);font-weight:400;">(optional)</span></label>
+        <textarea id="betaFeedback" rows="3" placeholder="Describe your biggest quality challenge…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn modal-cancel" id="betaModalCancel" style="background:transparent;border:1px solid var(--border);color:var(--text-muted);">Cancel</button>
+        <button class="btn btn-primary" id="betaSubmit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+          Request Access
+        </button>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div id="betaSuccess" style="display:none;text-align:center;padding:24px 0 8px;">
+      <div style="width:56px;height:56px;background:rgba(34,197,94,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4 style="font-size:18px;font-weight:800;margin-bottom:8px;">You're on the list!</h4>
+      <p style="color:var(--text-muted);font-size:14px;line-height:1.6;">Thanks for signing up. We'll be in touch soon with your early access details.</p>
+      <button class="btn btn-primary" id="betaSuccessClose" style="margin-top:24px;padding:12px 32px;">Done</button>
     </div>
   </div>
 </div>
@@ -2003,25 +2151,120 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, methodSource: code }),
     });
-    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    if (!res.ok) {
+      if (res.status === 422) {
+        throw new Error('The source code might not be working or has syntactic issues, or has dependencies. Your method should be flat without any dependencies.');
+      }
+      throw new Error(`Server error: ${res.status}`);
+    }
     return res.json();
   }
 
   // ── Apply API response to the UI ────────────────────────────────────
+  // Wraps variable names (keys of inputs, _N suffix stripped) found in `text`
+  // with a styled span. Matches whole words only so "amount" doesn't match "amounts".
+  function highlightVars(text, inputs) {
+    if (!text || !inputs) return text;
+    // Build unique clean names: amount_1 → amount
+    const names = [...new Set(
+      Object.keys(inputs).map(k => k.replace(/_\d+$/, ''))
+    )].filter(Boolean);
+    if (names.length === 0) return text;
+
+    // Sort longest first to avoid partial replacements (e.g. "fee" inside "expressFee")
+    names.sort((a, b) => b.length - a.length);
+
+    // Escape special regex chars then build alternation
+    const pattern = new RegExp(
+      '\\b(' + names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')\\b',
+      'g'
+    );
+    return text.replace(pattern, '<span class="var-highlight">$1</span>');
+  }
+
   function applyAnalysisResult(data) {
-    const pathCount = Array.isArray(data.paths) ? data.paths.length : 0;
-    const parsed    = parseMethod(simEditor.value);
-    const name      = parsed ? parsed.name : (data.methodName || 'Method');
-    const params    = parsed ? parsed.paramCount : 0;
+    const findings    = Array.isArray(data.topFindings) ? data.topFindings : [];
+    const totalPaths  = data.totalPaths     || 0;
+    const totalCases  = data.totalTestCases || 0;
+    const parsed      = parseMethod(simEditor.value);
+    const name        = data.methodName || (parsed ? parsed.name : 'Method');
+    const params      = parsed ? parsed.paramCount : 0;
 
-    // Footer metadata
+    // ── Header metadata & pill ────────────────────────────────────────
     simMeta.textContent =
-      `Method detected: ${name}() · ${params} parameter${params !== 1 ? 's' : ''} · ${pathCount} behavioral path${pathCount !== 1 ? 's' : ''} found`;
-
-    // Paths pill
+      `Method detected: ${name}() · ${params} parameter${params !== 1 ? 's' : ''} · ${totalPaths} path${totalPaths !== 1 ? 's' : ''} · ${totalCases} test case${totalCases !== 1 ? 's' : ''}`;
     simPathsCount.textContent =
-      `${pathCount} Behavioral Path${pathCount !== 1 ? 's' : ''} Discovered`;
+      `${totalPaths} Behavioral Path${totalPaths !== 1 ? 's' : ''} Discovered`;
     simPathsWrap.style.visibility = 'visible';
+
+    // ── Build behavior cards ──────────────────────────────────────────
+    const container     = document.getElementById('behaviorCards');
+    const reviewSection = document.getElementById('reviewSection');
+    const behaviorMeta  = document.getElementById('behaviorMeta');
+    container.innerHTML = '';
+
+    if (findings.length === 0) {
+      reviewSection.style.display = 'none';
+      return;
+    }
+
+    const lockIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+
+    findings.forEach((finding, idx) => {
+      const inputs  = finding.inputs  || {};
+      const output  = finding.output  != null ? finding.output : '—';
+
+      // Input chips — strip trailing _1, _2 suffixes from variable names
+      const inputChips = Object.entries(inputs).map(([k, v]) =>
+        `<span class="model-chip"><strong>${k.replace(/_\d+$/, '')}</strong> = ${v}</span>`
+      ).join('');
+
+      const card = document.createElement('div');
+      card.className = 'behavior-card';
+      card.dataset.index = idx;
+      const bodyHtml = highlightVars(finding.body || '', inputs);
+      card.innerHTML = `
+        <div class="behavior-card-head">
+          <h4>Finding ${idx + 1}</h4>
+        </div>
+        ${bodyHtml ? `<p class="behavior-description">${bodyHtml}</p>` : ''}
+        ${inputChips ? `<div class="behavior-meta">INPUTS</div><div class="behavior-model">${inputChips}</div>` : ''}
+        <div class="behavior-meta">OUTPUT</div>
+        <div class="behavior-model">
+          <span class="model-chip"><strong>return</strong> = ${output}</span>
+        </div>
+        <div class="behavior-actions">
+          <div class="btn-approve" data-idx="${idx}">${lockIcon} Approve Behavior</div>
+          <div class="btn-investigate" data-idx="${idx}">${lockIcon} Needs Investigation</div>
+        </div>`;
+      container.appendChild(card);
+    });
+
+    // Approve / investigate click handlers
+    let approved = 0;
+    const total  = findings.length;
+
+    function updateMeta() {
+      behaviorMeta.innerHTML =
+        `All behaviors reviewed &nbsp; <span>${approved} of ${total} approved</span>`;
+    }
+
+    container.addEventListener('click', e => {
+      const card = e.target.closest('.behavior-card');
+      if (!card) return;
+      if (e.target.classList.contains('btn-approve')) {
+        card.querySelector('.btn-approve').style.cssText   = 'background:var(--green);color:#fff;border:none;';
+        card.querySelector('.btn-investigate').style.cssText = '';
+        if (!card.dataset.approved) { card.dataset.approved = '1'; approved++; updateMeta(); }
+      } else if (e.target.classList.contains('btn-investigate')) {
+        card.querySelector('.btn-investigate').style.cssText = 'background:rgba(245,158,11,0.15);border-color:var(--orange);';
+        if (card.dataset.approved) { delete card.dataset.approved; approved--; updateMeta(); }
+      }
+    });
+
+    updateMeta();
+    reviewSection.style.display = 'block';
+    reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ── Email modal logic ────────────────────────────────────────────────
@@ -2126,6 +2369,128 @@
   // Init — render highlight and metadata for the pre-filled code
   renderHighlight();
   updateSimUI();
+
+  // Pre-populate review section with the example API response
+  applyAnalysisResult({
+    "methodName": "CalculateDiscount",
+    "totalPaths": 4,
+    "totalTestCases": 15,
+    "topFindings": [
+      { "body": "With [amount_1=1000], the following conditions are active: amount_1 = 1000. The method returns 0.",   "inputs": { "amount_1": "1000" }, "output": "0"      },
+      { "body": "With [amount_1=999], the following conditions are active: amount_1 = 999. The method returns 99.9.",  "inputs": { "amount_1": "999"  }, "output": "99.9"   },
+      { "body": "With [amount_1=1001], the following conditions are active: amount_1 = 1001. The method returns 150.15.", "inputs": { "amount_1": "1001" }, "output": "150.15" },
+      { "body": "With [amount_1=500], the following conditions are active: amount_1 = 500. The method returns 0.",    "inputs": { "amount_1": "500"  }, "output": "0"      },
+      { "body": "With [amount_1=501], the following conditions are active: amount_1 = 501. The method returns 50.1.", "inputs": { "amount_1": "501"  }, "output": "50.1"   }
+    ],
+    "remainingAttempts": 4
+  });
+
+  // ── BETA SIGNUP MODAL ─────────────────────────────────────────────
+  const betaModal        = document.getElementById('betaModal');
+  const betaForm         = document.getElementById('betaForm');
+  const betaSuccess      = document.getElementById('betaSuccess');
+  const betaModalClose   = document.getElementById('betaModalClose');
+  const betaModalCancel  = document.getElementById('betaModalCancel');
+  const betaSubmit       = document.getElementById('betaSubmit');
+  const betaSuccessClose = document.getElementById('betaSuccessClose');
+
+  const EMAIL_RE2 = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const betaFields = {
+    // Required
+    name:          { el: document.getElementById('betaName'),          err: document.getElementById('betaNameErr'),          validate: v => v.trim() ? '' : 'Full name is required.' },
+    companyEmail:  { el: document.getElementById('betaCompanyEmail'),  err: document.getElementById('betaCompanyEmailErr'),  validate: v => !v.trim() ? 'Company email is required.' : !EMAIL_RE2.test(v) ? 'Enter a valid email.' : '' },
+    lang:          { el: document.getElementById('betaLang'),          err: document.getElementById('betaLangErr'),          validate: v => v ? '' : 'Repository language is required.' },
+    // Optional — validated only if a value is entered
+    personalEmail: { el: document.getElementById('betaPersonalEmail'), err: document.getElementById('betaPersonalEmailErr'), validate: v => v.trim() && !EMAIL_RE2.test(v) ? 'Enter a valid email.' : '' },
+  };
+
+  function openBetaModal() {
+    // Reset form
+    Object.values(betaFields).forEach(({ el, err }) => {
+      el.value = '';
+      err.textContent = '';
+      el.classList.remove('invalid');
+    });
+    document.getElementById('betaFeedback').value = '';
+    betaForm.style.display    = 'block';
+    betaSuccess.style.display = 'none';
+    betaModal.classList.add('open');
+    betaFields.name.el.focus();
+  }
+
+  function closeBetaModal() {
+    betaModal.classList.remove('open');
+  }
+
+  // Intercept all [data-beta] elements
+  document.addEventListener('click', e => {
+    const trigger = e.target.closest('[data-beta]');
+    if (!trigger) return;
+    e.preventDefault();
+    openBetaModal();
+  });
+
+  betaModalClose.addEventListener('click',  closeBetaModal);
+  betaModalCancel.addEventListener('click', closeBetaModal);
+  betaSuccessClose.addEventListener('click', closeBetaModal);
+
+  betaModal.addEventListener('click', e => {
+    if (e.target === betaModal) closeBetaModal();
+  });
+
+  // Live validation
+  Object.values(betaFields).forEach(({ el, err, validate }) => {
+    el.addEventListener('input', () => {
+      const msg = validate(el.value);
+      err.textContent = msg;
+      el.classList.toggle('invalid', !!msg && el.value !== '');
+    });
+  });
+
+  // Submit
+  betaSubmit.addEventListener('click', async () => {
+    // Validate all required fields first
+    let valid = true;
+    Object.values(betaFields).forEach(({ el, err, validate }) => {
+      const msg = validate(el.value);
+      err.textContent = msg;
+      el.classList.toggle('invalid', !!msg);
+      if (msg) valid = false;
+    });
+    if (!valid) return;
+
+    // Loading state
+    betaSubmit.disabled  = true;
+    betaSubmit.innerHTML = `<span class="btn-spinner"></span> Sending…`;
+
+    try {
+      const res = await fetch('http://localhost:8080/demo/beta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          FullName:           betaFields.name.el.value.trim(),
+          CompanyEmail:       betaFields.companyEmail.el.value.trim(),
+          PersonalEmail:      betaFields.personalEmail.el.value.trim() || null,
+          RepositoryLanguage: betaFields.lang.el.value,
+          Message:            document.getElementById('betaFeedback').value.trim() || null,
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+      // Show success state
+      betaForm.style.display    = 'none';
+      betaSuccess.style.display = 'block';
+
+    } catch (err) {
+      // Show error under the last field
+      document.getElementById('betaLangErr').textContent =
+        `Submission failed: ${err.message}. Please try again.`;
+    } finally {
+      betaSubmit.disabled  = false;
+      betaSubmit.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg> Request Access`;
+    }
+  });
 
   // ── HAMBURGER TOGGLE ───────────────────────────────────────────────
   const navToggle = document.getElementById('navToggle');
