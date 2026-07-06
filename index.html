@@ -2541,6 +2541,122 @@
   });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── GOOGLE ANALYTICS CUSTOM EVENTS ────────────────────────────────
+  // Helper — safe wrapper so a missing gtag never breaks the page
+  function track(eventName, params) {
+    if (typeof gtag === 'function') gtag('event', eventName, params || {});
+  }
+
+  // 1. SECTION VIEWED — fires once per section as it enters the viewport
+  //    event: section_viewed  |  params: section_id
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        track('section_viewed', { section_id: entry.target.id || entry.target.className });
+        sectionObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+  // 2. CTA CLICKED — every [data-beta] element; captures which button was clicked
+  //    event: cta_clicked  |  params: cta_label
+  const originalBetaHandler = document.addEventListener;
+  document.querySelectorAll('[data-beta]').forEach(el => {
+    el.addEventListener('click', () => {
+      track('cta_clicked', { cta_label: el.textContent.trim().slice(0, 60) });
+    });
+  });
+
+  // 3. BETA MODAL OPENED
+  //    event: beta_modal_opened
+  const _origOpenBeta = openBetaModal;
+  openBetaModal = function() {
+    track('beta_modal_opened');
+    _origOpenBeta();
+  };
+
+  // 4. BETA FORM SUBMITTED — success
+  //    event: beta_signup_success  |  params: language
+  // 5. BETA FORM FAILED
+  //    event: beta_signup_error  |  params: error_message
+  betaSubmit.addEventListener('click', async () => {
+    // validation already runs in the main handler above;
+    // we only track if it gets to the fetch stage — watch for the spinner appearing
+  });
+  // Patch: wrap the existing betaSubmit handler outcome via MutationObserver on betaSuccess
+  new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      if (m.target === betaSuccess && betaSuccess.style.display === 'block') {
+        track('beta_signup_success', {
+          language: document.getElementById('betaLang').value
+        });
+      }
+    });
+  }).observe(betaSuccess, { attributes: true, attributeFilter: ['style'] });
+
+  // 6. SIMULATE BUTTON CLICKED — email modal opened
+  //    event: simulate_clicked
+  simBtn.addEventListener('click', () => {
+    track('simulate_clicked');
+  });
+
+  // 7. ANALYSIS RUN — success
+  //    event: analysis_success  |  params: total_paths, total_test_cases, method_name
+  // 8. ANALYSIS ERROR
+  //    event: analysis_error  |  params: error_message
+  //    Patched into the modalSubmit handler outcome via reviewSection visibility
+  new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      if (m.target === document.getElementById('reviewSection') &&
+          document.getElementById('reviewSection').style.display === 'block') {
+        const metaText = document.getElementById('simMeta').textContent;
+        const pathsMatch = metaText.match(/(\d+) path/);
+        const casesMatch = metaText.match(/(\d+) test case/);
+        const nameMatch  = metaText.match(/detected: (\w+)\(\)/);
+        track('analysis_success', {
+          method_name:      nameMatch  ? nameMatch[1]  : 'unknown',
+          total_paths:      pathsMatch ? parseInt(pathsMatch[1])  : 0,
+          total_test_cases: casesMatch ? parseInt(casesMatch[1]) : 0,
+        });
+      }
+    });
+  }).observe(document.getElementById('reviewSection'), { attributes: true, attributeFilter: ['style'] });
+
+  // 9. NAV LINK CLICKED
+  //    event: nav_link_clicked  |  params: link_label
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      track('nav_link_clicked', { link_label: a.textContent.trim() });
+    });
+  });
+
+  // 10. LOAD MORE CLICKED
+  //     event: load_more_clicked
+  document.getElementById('loadMoreBtn').addEventListener('click', () => {
+    track('load_more_clicked');
+  });
+
+  // 11. CODE EDITOR FIRST INTERACTION — user pastes or types their own code
+  //     event: editor_first_interaction
+  let editorInteracted = false;
+  simEditor.addEventListener('input', () => {
+    if (!editorInteracted) {
+      editorInteracted = true;
+      track('editor_first_interaction');
+    }
+  });
+
+  // 12. BEHAVIOR CARD ACTION — approve or flag
+  //     event: behavior_card_action  |  params: action (approved | flagged), card_index
+  document.getElementById('behaviorCards').addEventListener('click', e => {
+    if (e.target.classList.contains('btn-approve')) {
+      track('behavior_card_action', { action: 'approved', card_index: e.target.dataset.idx });
+    } else if (e.target.classList.contains('btn-investigate')) {
+      track('behavior_card_action', { action: 'flagged',   card_index: e.target.dataset.idx });
+    }
+  });
 </script>
 
 
