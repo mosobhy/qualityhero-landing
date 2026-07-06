@@ -2560,12 +2560,11 @@
   }, { threshold: 0.3 });
   document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
 
-  // 2. CTA CLICKED — every [data-beta] element; captures which button was clicked
-  //    event: cta_clicked  |  params: cta_label
-  const originalBetaHandler = document.addEventListener;
+  // 2. BETA_ACCESS_REQUESTED — every [data-beta] element; captures which button was clicked
+  //    event: beta_access_requested  |  params: cta_label
   document.querySelectorAll('[data-beta]').forEach(el => {
     el.addEventListener('click', () => {
-      track('cta_clicked', { cta_label: el.textContent.trim().slice(0, 60) });
+      track('beta_access_requested', { cta_label: el.textContent.trim().slice(0, 60) });
     });
   });
 
@@ -2638,14 +2637,10 @@
     track('load_more_clicked');
   });
 
-  // 11. CODE EDITOR FIRST INTERACTION — user pastes or types their own code
-  //     event: editor_first_interaction
-  let editorInteracted = false;
+  // 11. CODE EDITOR INTERACTION — fires every time the user types or pastes code
+  //     event: editor_code_changed
   simEditor.addEventListener('input', () => {
-    if (!editorInteracted) {
-      editorInteracted = true;
-      track('editor_first_interaction');
-    }
+    track('editor_code_changed');
   });
 
   // 12. BEHAVIOR CARD ACTION — approve or flag
