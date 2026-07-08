@@ -1905,6 +1905,9 @@
 </div>
 
 <script>
+  // ── API BASE URL ───────────────────────────────────────────────────
+  const API_BASE = 'http://92.205.19.128:8080';
+
   // ── C# SYNTAX HIGHLIGHTER ──────────────────────────────────────────
   const CS_KEYWORDS = new Set([
     'abstract','as','base','bool','break','byte','case','catch','char',
@@ -2156,7 +2159,7 @@
 
   // ── API call ─────────────────────────────────────────────────────────
   async function runAnalysis(email, code) {
-    const res = await fetch('http://localhost:8080/demo/analyze', {
+    const res = await fetch(`${API_BASE}/demo/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, methodSource: code }),
@@ -2474,7 +2477,7 @@
     betaSubmit.innerHTML = `<span class="btn-spinner"></span> Sending…`;
 
     try {
-      const res = await fetch('http://localhost:8080/demo/beta', {
+      const res = await fetch(`${API_BASE}/demo/beta`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
